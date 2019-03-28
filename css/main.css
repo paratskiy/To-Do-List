@@ -1,0 +1,139 @@
+body{
+    font-family: 'Roboto', sans-serif;
+    background-color: #6d6d44;
+}
+
+.wrap{
+    height: 100vh;
+}
+
+header{
+    text-align: center;
+    padding: 50px;
+}
+
+header span{
+    display: block;
+    text-transform: uppercase;
+    color: #515151;
+}
+
+span.title{
+    font-size: 30px;
+    font-weight: 500;
+}
+
+span.title > span{
+    font-size: 20px;
+    font-weight: 400;    
+}
+
+.todo-list-wrap{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.todo-list-wrap i {
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+}
+
+input{
+    box-sizing: border-box;
+    height: 30px;
+}
+
+[type="checkbox"]{
+    height: auto;
+}
+
+input.edit{
+    display: none;
+}
+
+form{
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+form#todo-list-title{
+    width: 700px;
+    height: 50px;
+    background-color: blue;
+}
+
+input#title {
+    width: 78%;
+    margin-left: 10px;
+    color: #fff;
+    background: none;
+    border: none;
+    font-weight: 600;
+    font-size: 20px;
+}
+
+form#todo-list-title i {
+    font-size: 18px;
+    color: #ffffffcf;
+}
+
+form#todo-list-title i.calendar {
+    color: #484848;
+    font-size: 25px;
+}
+
+form#todo-form{
+    width: 700px;
+    height: 50px;
+    background-color: darkgray;
+    position: relative;
+}
+
+input#add-todo-item {
+    width: 78%;
+    margin-left: 10px;
+    border: none;
+    padding-left: 10px;
+}
+
+form#todo-form i {
+    font-size: 25px;
+    color: #006100;
+    height: 30px;
+    vertical-align: middle;
+}
+
+form#todo-form button {
+    height: 30px;
+    position: absolute;
+    top: 10px;
+    width: 15%;
+    height: 30px;
+    background-color: green;
+    color: #fff;
+    border: none;
+    border-radius: 0 5px 5px 0;
+}
+
+ul.todo-list{
+    margin: 0;
+    padding: 0;
+}
+
+li.todo-item{
+    line-height: 30px;
+    list-style-type: none;
+    width: 700px;
+    height: 50px;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #fff;
+}
+
+li.todo-item:last-child{
+    border-radius: 0 0 20px 20px;
+}
+

@@ -1,21 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
-        <script defer src="js/main.js"></script>
+    <script defer src="js/main.js"></script>
 
-        <title>To Do List</title>
-    </head>
+    <title>To Do List</title>
+</head>
 
-    <body>
+<body>
 
-    </body>
+    <div class="wrap">
+
+        <header>
+            <span class="title">Simple ToDo Lists<span>from ruby garage</span></span>
+        </header>
+
+        <div class="todo-list-wrap">
+
+            <form id="todo-list-header">
+                <i class="far fa-calendar-alt calendar"></i>
+                <input type="text" name="title" id="title" value="Complete the test task for Ruby Garage">
+                <i class="fas fa-pen edit"></i>
+                <i class="far fa-trash-alt delete"></i>
+            </form>
+
+            <form id="create-todo-item">
+                <i class="fas fa-plus"></i>
+                <input type="text" name="add-todo-item" id="add-todo-item"
+                    placeholder="Start typing here to create a task...">
+                <button id="add-task" type="button">Add Task</button>
+            </form>
+
+            <ul class="todo-item">
+                <li class="todo-item">
+                    <input type="checkbox" name="done" class="done">
+                    <label for="done">Write HTML & CSS</label>
+                    <input type="text" name="edit" class="edit">
+                    <i class="fas fa-arrows-alt-v move"></i>
+                    <i class="fas fa-pen edit"></i>
+                    <i class="far fa-trash-alt delete"></i>
+                </li>
+            </ul>
+
+        </div>
+
+        <button id="add-todo-list" type="button">Add Todo List</button>
+
+    </div>
+
+</body>
 
 </html>
