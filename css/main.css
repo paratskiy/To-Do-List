@@ -28,14 +28,14 @@ span.title > span{
     font-weight: 400;    
 }
 
-.todo-list-wrap{
+.todo-wrap{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.todo-list-wrap i {
+.todo-wrap i {
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
