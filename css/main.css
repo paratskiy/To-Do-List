@@ -28,14 +28,14 @@ span.title > span{
     font-weight: 400;    
 }
 
-.todo-wrap{
+.todo-list-wrap{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.todo-wrap i {
+.todo-list-wrap i {
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
@@ -50,7 +50,11 @@ input{
     height: auto;
 }
 
-input.edit{
+input.edit.hide{
+    display: none;
+}
+
+label.title.hide{
     display: none;
 }
 
@@ -59,13 +63,13 @@ form{
     box-sizing: border-box;
 }
 
-form#todo-list-title{
+form.todo-list-header{
     width: 700px;
     height: 50px;
     background-color: blue;
 }
 
-input#title {
+label.todo-title{
     width: 78%;
     margin-left: 10px;
     color: #fff;
@@ -75,38 +79,38 @@ input#title {
     font-size: 20px;
 }
 
-form#todo-list-title i {
+form.todo-list-header i {
     font-size: 18px;
     color: #ffffffcf;
 }
 
-form#todo-list-title i.calendar {
+form.todo-list-header i.calendar {
     color: #484848;
     font-size: 25px;
 }
 
-form#todo-form{
+form.create-todo-item{
     width: 700px;
     height: 50px;
     background-color: darkgray;
     position: relative;
 }
 
-input#add-todo-item {
+input.add-todo-item {
     width: 78%;
     margin-left: 10px;
     border: none;
     padding-left: 10px;
 }
 
-form#todo-form i {
+form.create-todo-item i {
     font-size: 25px;
     color: #006100;
     height: 30px;
     vertical-align: middle;
 }
 
-form#todo-form button {
+form.create-todo-item button {
     height: 30px;
     position: absolute;
     top: 10px;

@@ -27,26 +27,29 @@
             <span class="title">Simple ToDo Lists<span>from ruby garage</span></span>
         </header>
 
-        <div class="todo-wrap">
+        <div class="todo-list-wrap">
 
-            <form id="todo-list-header" onsubmit="return false">
+            <form class="todo-list-header" onsubmit="return false">
                 <i class="far fa-calendar-alt calendar"></i>
-                <input type="text" name="title" id="title" value="Complete the test task for Ruby Garage">
+                <label class="todo-title">Comlete the test task for Ruby Garage</label>
+                <input type="text" name="edit-todo-title" class="edit edit-todo-title"
+                    value="Comlete the test task for Ruby Garage">
                 <i class="fas fa-pen edit"></i>
                 <i class="far fa-trash-alt delete"></i>
             </form>
 
-            <form id="create-todo-item" onsubmit="return false">
+            <form class="create-todo-item" onsubmit="return false">
                 <i class="fas fa-plus"></i>
-                <input type="text" name="add-todo-item" id="add-todo-item"
+                <input type="text" name="add-todo-item" class="add-todo-item"
                     placeholder="Start typing here to create a task...">
-                <button id="add-task" type="button">Add Task</button>
+                <button class="add-todo-item" type="button">Add Task</button>
             </form>
 
             <ul class="todo-list">
                 <li class="todo-item">
                     <input type="checkbox" name="done" class="done">
-                    <input type="text" name="item-title" class="item-title" value="Write HTML & CSS">
+                    <label class="item-title">Write HTML &amp; CSS</label>
+                    <input type="text" name="edit-item-title" class="edit edit-item-title" value="Write HTML &amp; CSS">
                     <i class="fas fa-arrows-alt-v move"></i>
                     <i class="fas fa-pen edit"></i>
                     <i class="far fa-trash-alt delete"></i>
