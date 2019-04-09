@@ -15,5 +15,11 @@ addTodoList.addEventListener('click', function () {
 
 })
 
+document.addEventListener('DOMContentLoaded', function(){
+
+    todoList.loadTodoList();
+
+})
+
 
 
