@@ -10,17 +10,9 @@ class TodoList extends Global {
 
     }
 
-    createTodoList(data) {
+    createTodoList(name, data) {
 
-        // if(data){
-
-        //     const todoName = document.createTextNode(data.name);
-            
-        //     titleTodoList.appendChild(todoName);
-        //     console.log(typeof data.name);
-        // };
-
-        this.todoListName = (data) ? data.project_name : '';
+        this.todoListName = (name) ? name : '';
 
         const logoTodoList = this.createElement('i', { class: 'far fa-calendar-alt calendar' });
         const editTodoTitle = this.createElement('input', { type: 'text', name: 'edit-todo-title', class: 'edit edit-todo-title hide', value: this.todoListName });
@@ -28,7 +20,7 @@ class TodoList extends Global {
         const editTodoListBtn = this.createElement('i', { class: 'fas fa-pen edit' });
         const deleteTodoListBtn = this.createElement('i', { class: 'far fa-trash-alt delete' });
 
-        
+
         const todoListHeader = this.createElement('form', {
             class: 'todo-list-header',
             onsubmit: 'return false'
@@ -52,6 +44,17 @@ class TodoList extends Global {
         const todoListWrap = this.createElement('div', { class: 'todo-list-wrap' }, todoListHeader, createTodoItem, this.todoList);
 
         this.parent.appendChild(todoListWrap);
+
+
+        if(data){
+            console.log(data);
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const element = data[key];
+                    this.addTodoItem(element.task_name, element.status);
+                }
+            }
+        }
 
         addTodoItemBtn.addEventListener('click', () => {
             if (this.isValid(inputAddTodoItem)) {
@@ -83,7 +86,7 @@ class TodoList extends Global {
             }
         });
 
-        if(!data){
+        if (!name) {
             this.nameTheList(todoListHeader);
         }
 
@@ -105,11 +108,12 @@ class TodoList extends Global {
 
     }
 
-    addTodoItem(data) {
+    addTodoItem(name, status) {
+        
+        this.todoItemName = (name) ? name : this.inputAddTodoItem.value;
+        this.status = (status == 0) ? false : true;
 
-        this.todoItemName = (data) ? data.task_name : this.inputAddTodoItem.value;
-
-        const completeCheckbox = this.createElement('input', { type: 'checkbox', name: 'done', class: 'done' });
+        const completeCheckbox = this.createElement('input', { type: 'checkbox', name: 'done', class: 'done'});
         const itemTitle = this.createElement('label', { class: 'title item-title' }, this.todoItemName);
         const editItemTitle = this.createElement('input', { type: 'text', name: 'edit-item-title', class: 'edit edit-item-title hide', value: this.todoItemName });
         const moveItemBtn = this.createElement('i', { class: 'fas fa-arrows-alt-v move' });
@@ -135,6 +139,9 @@ class TodoList extends Global {
             this.completeTask(todoItem);
         })
 
+        if(status){
+            completeCheckbox.checked = this.status;
+        }
         this.inputAddTodoItem.value = '';
 
     }
@@ -142,59 +149,61 @@ class TodoList extends Global {
     loadTodoList() {
 
         let xhr = new XMLHttpRequest();
-    
+
         xhr.open('POST', 'server/index.php', true);
-    
+
         xhr.send('load-todo-list');
-    
+
         xhr.onreadystatechange = () => {
-            
+
             if (xhr.readyState != 4) return;
-    
+
             if (xhr.status != 200) {
                 alert(xhr.status + ': ' + xhr.statusText);
             } else {
+                
                 this.data = JSON.parse(xhr.responseText);
-                for (let i = 0; i < this.data.length; i++) {
-                    const element = this.data[i];
-                    this.createTodoList(element);   
-                } 
 
-                this.loadTodoItem();
-
-            }
-    
-        }
-    
-    }
-
-    loadTodoItem(){
-
-        let xhr = new XMLHttpRequest();
-
-        xhr.open('POST', 'server/index.php', true);
-
-        xhr.send('load-todo-items');
-
-        xhr.onreadystatechange = () => {
-
-            if(xhr.readyState != 4) return;
-
-            if(xhr.status != 200){
-                alert(xhr.status + ': ' + xhr.statusText);
-            } else {
-                this.data = JSON.parse(xhr.responseText);
-                for (let i = 0; i < this.data.length; i++) {
-                    const element = this.data[i];
-                    console.log(element);
-                    this.addTodoItem(element);
-                    
+                for (const key in this.data) {
+                    if (this.data.hasOwnProperty(key)) {
+                        const element = this.data[key];
+                        this.createTodoList(key, element);
+                    }
                 }
+
             }
 
         }
 
     }
+
+    // loadTodoItem() {
+
+    //     let xhr = new XMLHttpRequest();
+
+    //     xhr.open('POST', 'server/index.php', true);
+
+    //     xhr.send('load-todo-items');
+
+    //     xhr.onreadystatechange = () => {
+
+    //         if (xhr.readyState != 4) return;
+
+    //         if (xhr.status != 200) {
+    //             alert(xhr.status + ': ' + xhr.statusText);
+    //         } else {
+    //             this.data = JSON.parse(xhr.responseText);
+    //             for (let i = 0; i < this.data.length; i++) {
+    //                 const element = this.data[i];
+    //                 console.log(element);
+    //                 this.addTodoItem(element);
+
+    //             }
+    //         }
+
+    //     }
+
+    // }
 
     deleteElement(parent, el) {
         parent.removeChild(el);
