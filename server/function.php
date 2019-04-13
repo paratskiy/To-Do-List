@@ -1,6 +1,6 @@
 <?php
 
-function get_databse_data($query, $mysqli)
+function load_data($query, $mysqli)
 {
 
     $myArray = array();
@@ -12,8 +12,9 @@ function get_databse_data($query, $mysqli)
         while ($row = $result->fetch_assoc()) {
 
             $myArray[$row['project_name']] = array();
+            $myArray[$row['project_name']]['project_id'] = $row['id'];
 
-            $subResult = $mysqli->query("SELECT tasks.task_name, tasks.status 
+            $subResult = $mysqli->query("SELECT tasks.task_name, tasks.status, tasks.id 
                                          FROM `tasks` 
                                          WHERE tasks.project_id = (SELECT projects.id 
                                                                    FROM `projects` 
@@ -31,4 +32,19 @@ function get_databse_data($query, $mysqli)
 
     $result->close();
     $mysqli->close();
+}
+
+
+function update_data($query, $mysqli){
+
+    $result = $mysqli->query($query) or die("Ошибка " . $mysqli->error);
+
+    if($result){
+        echo $result;
+    
+
+    // $result->close();
+    // $mysqli->close();
+    }
+
 }

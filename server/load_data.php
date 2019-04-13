@@ -15,5 +15,5 @@ if ($xml == 'load-todo-list') {
                                  FROM `users` 
                                  WHERE `user_name` = 'paratskiy')";
 
-    get_databse_data($query, $mysqli);
+    load_data($query, $mysqli);
 }

@@ -2,93 +2,121 @@
 
 class TodoList extends Global {
 
-    constructor(parent) {
+    constructor(parent, name, data) {
 
         super();
 
         this.parent = parent;
+        this.data = data;
+        this.name = name;
 
-    }
+        this.todoListName = (this.name) ? this.name : '';
 
-    createTodoList(name, data) {
-
-        this.todoListName = (name) ? name : '';
-
-        const logoTodoList = this.createElement('i', { class: 'far fa-calendar-alt calendar' });
-        const editTodoTitle = this.createElement('input', { type: 'text', name: 'edit-todo-title', class: 'edit edit-todo-title hide', value: this.todoListName });
-        const titleTodoList = this.createElement('label', { class: 'title todo-title' }, this.todoListName);
-        const editTodoListBtn = this.createElement('i', { class: 'fas fa-pen edit' });
-        const deleteTodoListBtn = this.createElement('i', { class: 'far fa-trash-alt delete' });
+        this.logoTodoList = this.createElement('i', { class: 'far fa-calendar-alt calendar' });
+        this.editTodoTitle = this.createElement('input', { type: 'text', name: 'edit-todo-title', class: 'edit edit-todo-title hide', value: this.todoListName });
+        this.titleTodoList = this.createElement('label', { class: 'title todo-title' }, this.todoListName);
+        this.editTodoListBtn = this.createElement('i', { class: 'fas fa-pen edit' });
+        this.deleteTodoListBtn = this.createElement('i', { class: 'far fa-trash-alt delete' });
 
 
-        const todoListHeader = this.createElement('form', {
+        this.todoListHeader = this.createElement('form', {
             class: 'todo-list-header',
             onsubmit: 'return false'
-        }, logoTodoList, titleTodoList, editTodoTitle, editTodoListBtn, deleteTodoListBtn);
+        }, this.logoTodoList, this.titleTodoList, this.editTodoTitle, this.editTodoListBtn, this.deleteTodoListBtn);
 
-        const logoAddTodoItem = this.createElement('i', { class: 'fas fa-plus' });
+        this.logoAddTodoItem = this.createElement('i', { class: 'fas fa-plus' });
         this.inputAddTodoItem = this.createElement('input', {
             type: 'text',
             name: 'add-todo-item',
             class: 'add-todo-item',
             placeholder: 'Start typing here to create a task...'
         });
-        const addTodoItemBtn = this.createElement('button', { class: 'add-todo-item-btn', type: 'button' }, 'Add Task');
-        const createTodoItem = this.createElement('form', {
+        this.addTodoItemBtn = this.createElement('button', { class: 'add-todo-item-btn', type: 'button' }, 'Add Task');
+        this.createTodoItem = this.createElement('form', {
             class: 'create-todo-item',
             onsubmit: 'return false'
-        }, logoAddTodoItem, this.inputAddTodoItem, addTodoItemBtn);
+        }, this.logoAddTodoItem, this.inputAddTodoItem, this.addTodoItemBtn);
 
         this.todoList = this.createElement('ul', { class: 'todo-list' });
 
-        const todoListWrap = this.createElement('div', { class: 'todo-list-wrap' }, todoListHeader, createTodoItem, this.todoList);
+        this.todoListWrap = this.createElement('div', { class: 'todo-list-wrap' }, this.todoListHeader, this.createTodoItem, this.todoList);
+        this.todoListWrap.dataset.projectName = '';
+        this.todoListWrap.dataset.projectId = '';
+        this.todoListWrap.dataset.elementName = 'project';
 
-        this.parent.appendChild(todoListWrap);
+    }
 
+    createTodoList() {
 
-        if(data){
-            console.log(data);
-            for (const key in data) {
-                if (data.hasOwnProperty(key)) {
-                    const element = data[key];
-                    this.addTodoItem(element.task_name, element.status);
+        this.parent.appendChild(this.todoListWrap);
+
+        if (this.data) {
+            this.todoListWrap.dataset.projectId = this.data.project_id;
+            this.todoListWrap.dataset.projectName = this.name;
+            for (const key in this.data) {
+                if (this.data.hasOwnProperty(key) && typeof this.data[key] != 'string') {
+                    const element = this.data[key];
+                    const todoItem = new TodoItem(this.todoList, element.task_name, element.status, element.id);
+                    todoItem.addTodoItem();
                 }
             }
         }
 
-        addTodoItemBtn.addEventListener('click', () => {
-            if (this.isValid(inputAddTodoItem)) {
-                this.addTodoItem();
+        this.addTodoItemBtn.addEventListener('click', () => {
+            if (this.isValid(this.inputAddTodoItem)) {
+                const todoItem = new TodoItem(this.todoList, this.inputAddTodoItem.value);
+                let taskInfo = todoItem.addTodoItem();
+                this.inputAddTodoItem.value = '';
+
+                if(taskInfo){
+                    console.log(taskInfo);
+                }
+
             } else {
                 console.log('invalid');
             }
         });
 
-        this.inputAddTodoItem.addEventListener('keydown', (event) => {
-            if (event.keyCode == 13) {
-                if (this.isValid(this.inputAddTodoItem)) {
-                    this.addTodoItem();
+        // this.inputAddTodoItem.addEventListener('keydown', (event) => {
+        //     if (event.keyCode == 13) {
+        //         if (this.isValid(this.inputAddTodoItem)) {
+        //                  const todoItem = new TodoItem(element.task_name, element.status, element.id);
+        //todoItem.addTodoItem();
+        //         } else {
+        //             console.log('invalid');
+        //         }
+        //     }
+        // });
+
+        this.deleteTodoListBtn.addEventListener('click', () => {
+            this.deleteElement(this.todoListWrap);
+        });
+
+        this.editTodoListBtn.addEventListener('click', () => {
+            if (this.isValid(this.editTodoTitle)) {
+                let projectInfo = this.editElement(this.todoListWrap);
+
+                if(projectInfo.project_id == ''){
+                    this.insertTodoList(projectInfo);
                 } else {
-                    console.log('invalid');
+                    this.updateTodoList(projectInfo);
                 }
-            }
-        });
 
-        deleteTodoListBtn.addEventListener('click', () => {
-            this.deleteElement(this.parent, todoListWrap);
-        });
-
-        editTodoListBtn.addEventListener('click', () => {
-            if (this.isValid(editTodoTitle)) {
-                this.editElement(todoListHeader);
             } else {
                 console.log('invalid');
             }
         });
 
         if (!name) {
-            this.nameTheList(todoListHeader);
+            this.nameTheList(this.todoListWrap);
         }
+        // console.log(this);
+
+        if (this.todoListWrap.dataset.projectName) {
+            // console.log(this.todoListWrap.dataset.projectName);
+        }
+
+
 
     }
 
@@ -101,56 +129,19 @@ class TodoList extends Global {
         this.editElement(el);
 
         if (this.isValid(editInput)) {
-            this.editElement(el);
+            let projectName = this.editElement(el);
+            // console.log(projectName);
         } else {
             console.log('invalid');
         }
 
     }
 
-    addTodoItem(name, status) {
-        
-        this.todoItemName = (name) ? name : this.inputAddTodoItem.value;
-        this.status = (status == 0) ? false : true;
-
-        const completeCheckbox = this.createElement('input', { type: 'checkbox', name: 'done', class: 'done'});
-        const itemTitle = this.createElement('label', { class: 'title item-title' }, this.todoItemName);
-        const editItemTitle = this.createElement('input', { type: 'text', name: 'edit-item-title', class: 'edit edit-item-title hide', value: this.todoItemName });
-        const moveItemBtn = this.createElement('i', { class: 'fas fa-arrows-alt-v move' });
-        const editItemBtn = this.createElement('i', { class: 'fas fa-pen edit' });
-        const deleteItemBtn = this.createElement('i', { class: 'far fa-trash-alt delete' });
-        const todoItem = this.createElement('li', { class: 'todo-item' }, completeCheckbox, itemTitle, editItemTitle, moveItemBtn, editItemBtn, deleteItemBtn);
-
-        this.todoList.appendChild(todoItem);
-
-        deleteItemBtn.addEventListener('click', () => {
-            this.deleteElement(this.todoList, todoItem);
-        });
-
-        editItemBtn.addEventListener('click', () => {
-            if (this.isValid(editItemTitle)) {
-                this.editElement(todoItem);
-            } else {
-                console.log('invalid');
-            }
-        });
-
-        completeCheckbox.addEventListener('change', () => {
-            this.completeTask(todoItem);
-        })
-
-        if(status){
-            completeCheckbox.checked = this.status;
-        }
-        this.inputAddTodoItem.value = '';
-
-    }
-
     loadTodoList() {
 
-        let xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
 
-        xhr.open('POST', 'server/index.php', true);
+        xhr.open('POST', 'server/load_data.php', true);
 
         xhr.send('load-todo-list');
 
@@ -161,13 +152,14 @@ class TodoList extends Global {
             if (xhr.status != 200) {
                 alert(xhr.status + ': ' + xhr.statusText);
             } else {
-                
-                this.data = JSON.parse(xhr.responseText);
 
-                for (const key in this.data) {
-                    if (this.data.hasOwnProperty(key)) {
-                        const element = this.data[key];
-                        this.createTodoList(key, element);
+                const response = JSON.parse(xhr.responseText);
+
+                for (const key in response) {
+                    if (response.hasOwnProperty(key)) {
+                        const element = response[key];
+                        const todoList = new TodoList(parentNode, key, element);
+                        todoList.createTodoList();
                     }
                 }
 
@@ -177,13 +169,62 @@ class TodoList extends Global {
 
     }
 
-    // loadTodoItem() {
+    updateTodoList(body) {
+        console.log(JSON.stringify(body));
+        const xhr = new XMLHttpRequest();
 
-    //     let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'server/update_data.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(body));
+
+        xhr.onreadystatechange = () => {
+
+            if (xhr.readyState != 4) return;
+
+            if (xhr.status != 200) {
+                alert(xhr.status + ': ' + xhr.statusText);
+            } else {
+                // console.log(JSON.parse(xhr.responseText));
+                
+                console.log(xhr.responseText);
+            }
+
+        }
+
+    }
+
+    insertTodoList(body) {
+        
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('POST', 'server/insert_data.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(body));
+
+        xhr.onreadystatechange = () => {
+
+            if (xhr.readyState != 4) return;
+
+            if (xhr.status != 200) {
+                alert(xhr.status + ': ' + xhr.statusText);
+            } else {
+                // console.log(JSON.parse(xhr.responseText));
+                
+                console.log(xhr.responseText);
+            }
+
+        }
+        
+    }
+
+
+    // deleteElementDB(body){
+
+    //     const xhr = new XMLHttpRequest();
 
     //     xhr.open('POST', 'server/index.php', true);
 
-    //     xhr.send('load-todo-items');
+    //     xhr.send(JSON.stringify(body));
 
     //     xhr.onreadystatechange = () => {
 
@@ -192,21 +233,14 @@ class TodoList extends Global {
     //         if (xhr.status != 200) {
     //             alert(xhr.status + ': ' + xhr.statusText);
     //         } else {
-    //             this.data = JSON.parse(xhr.responseText);
-    //             for (let i = 0; i < this.data.length; i++) {
-    //                 const element = this.data[i];
-    //                 console.log(element);
-    //                 this.addTodoItem(element);
-
-    //             }
+    //             console.log(JSON.parse(xhr.responseText));
     //         }
 
     //     }
-
     // }
 
-    deleteElement(parent, el) {
-        parent.removeChild(el);
+    deleteElement(el) {
+        el.parentNode.removeChild(el);
     }
 
     editElement(el) {
@@ -220,27 +254,53 @@ class TodoList extends Global {
         editInput.focus();
         editInput.selectionStart = editInput.value.length;
 
-        editableLabel.innerHTML = editInput.value;
+        if (editInput.value != editableLabel.innerHTML) {
 
-        const keydownEvent = (event) => {
-
-            if (event.keyCode === 13) {
-                if (this.isValid(editInput)) {
-                    editInput.classList.toggle('hide');
-                    editableLabel.classList.toggle('hide');
-
-                    editableLabel.innerHTML = editInput.value;
-
-                    editInput.removeEventListener('keydown', keydownEvent, false);
-                } else {
-                    console.log('invalid');
-                }
-
+            if (el.dataset.elementName == 'project') {
+                
+                this.todoListWrap.dataset.projectName = editInput.value;
+                editableLabel.innerHTML = editInput.value;
+                return { element_name: this.todoListWrap.dataset.elementName, 
+                         project_name: this.todoListWrap.dataset.projectName, 
+                         project_id:   this.todoListWrap.dataset.projectId }
             }
+
+            if (el.dataset.elementName == 'task') {
+                
+                this.todoItem.dataset.taskName = editInput.value;
+                editableLabel.innerHTML = editInput.value;
+                return { element_name: this.todoItem.dataset.elementName, 
+                         task_name:    this.todoItem.dataset.taskName, 
+                         task_id:      this.todoItem.dataset.taskId,
+                         task_status:  this.todoItem.dataset.status }
+            }
+
+            editableLabel.innerHTML = editInput.value;
 
         }
 
-        editInput.addEventListener('keydown', keydownEvent, false);
+        return false;
+
+        // const keydownEvent = (event) => {
+
+        //     if (event.keyCode === 13) {
+        //         if (this.isValid(editInput)) {
+        //             editInput.classList.toggle('hide');
+        //             editableLabel.classList.toggle('hide');
+
+        //             editableLabel.innerHTML = editInput.value;
+
+        //             editInput.removeEventListener('keydown', keydownEvent, false);
+        //             console.log(editableLabel);
+        //         } else {
+        //             console.log('invalid');
+        //         }
+
+        //     }
+
+        // }
+        // editInput.removeEventListener('keydown', keydownEvent, false);
+        // editInput.addEventListener('keydown', keydownEvent, false);
 
     }
 
@@ -254,11 +314,119 @@ class TodoList extends Global {
 
     }
 
-    completeTask(el) {
+}
 
-        const completeCheckbox = el.querySelector('.done');
 
-        el.classList.toggle('complete');
+class TodoItem extends TodoList {
+
+    constructor(todoList, name_from_db, status, task_id, name) {
+
+        super();
+
+        this.todoList = todoList;
+        this.name_from_db = name_from_db;
+        this.name = name;
+        this.status = status;
+        this.task_id = task_id;
+
+        this.todoItemName = (this.name_from_db) ? this.name_from_db : this.name;
+        this.isComlete = (this.status == 0) ? false : true;
+
+        this.completeCheckbox = this.createElement('input', { type: 'checkbox', name: 'done', class: 'done' });
+        this.itemTitle = this.createElement('label', { class: 'title item-title' }, this.todoItemName);
+        this.editItemTitle = this.createElement('input', { type: 'text', name: 'edit-item-title', class: 'edit edit-item-title hide', value: this.todoItemName });
+        this.moveItemBtn = this.createElement('i', { class: 'fas fa-arrows-alt-v move' });
+        this.editItemBtn = this.createElement('i', { class: 'fas fa-pen edit' });
+        this.deleteItemBtn = this.createElement('i', { class: 'far fa-trash-alt delete' });
+        this.todoItem = this.createElement('li', { class: 'todo-item' }, this.completeCheckbox, this.itemTitle, this.editItemTitle, this.moveItemBtn, this.editItemBtn, this.deleteItemBtn);
+        this.todoItem.dataset.taskName = this.todoItemName;
+        this.todoItem.dataset.taskId = '';
+        this.todoItem.dataset.status = '0';
+
+    }
+
+
+    addTodoItem() {
+
+        this.todoList.appendChild(this.todoItem);
+
+        this.deleteItemBtn.addEventListener('click', () => {
+            console.log(this.todoItem.dataset.taskId);
+            this.deleteElement(this.todoItem);
+        });
+
+        this.editItemBtn.addEventListener('click', () => {
+            if (this.isValid(this.editItemTitle)) {
+                // this.editElement(this.todoItem);
+                let taskInfo = this.editElement(this.todoItem);
+                
+                if(taskInfo){
+                    
+                    if(taskInfo.task_id == ''){
+                        console.log('new');
+                    } else {
+                        this.updateTodoList(taskInfo);
+                    }
+
+                }
+
+            } else {
+                console.log('invalid');
+            }
+        });
+
+        this.completeCheckbox.addEventListener('change', () => {
+            let taskInfo = this.completeTask();
+            
+            if(taskInfo){
+                this.updateTodoList(taskInfo);
+            }
+        })
+
+        if (this.status == true) {
+            this.completeCheckbox.checked = this.isComlete;
+            this.completeTask(this.todoItem);
+        }
+
+        if (this.task_id) {
+            this.todoItem.dataset.taskId = this.task_id;
+        }
+
+        if (this.name_from_db) {
+            this.todoItem.dataset.taskName = this.name_from_db;
+        }
+
+        if (this.todoItem.dataset.taskName) {
+            // console.log(this.todoItem.dataset.taskName);
+        }
+
+        this.todoItem.dataset.elementName = 'task';
+
+        return { element_name: this.todoItem.dataset.elementName, 
+                 task_name:    this.todoItem.dataset.taskName, 
+                 task_id:      this.todoItem.dataset.taskId,
+                 task_status:  this.todoItem.dataset.status }
+
+        
+
+    }
+
+    completeTask() {
+
+        const completeCheckbox = this.todoItem.querySelector('.done');
+
+        this.todoItem.classList.toggle('complete');
+
+        if(this.todoItem.dataset.status == 0){
+            this.todoItem.dataset.status = 1;
+        } else {
+            this.todoItem.dataset.status = 0;
+        }
+
+        return { element_name: this.todoItem.dataset.elementName, 
+                 task_name:    this.todoItem.dataset.taskName, 
+                 task_id:      this.todoItem.dataset.taskId,
+                 task_status:  this.todoItem.dataset.status }
 
     }
 
