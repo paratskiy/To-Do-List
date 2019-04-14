@@ -56,7 +56,7 @@ class TodoList extends Global {
             for (const key in this.data) {
                 if (this.data.hasOwnProperty(key) && typeof this.data[key] != 'string') {
                     const element = this.data[key];
-                    const todoItem = new TodoItem(this.todoList, element.task_name, element.status, element.id);
+                    const todoItem = new TodoItem(this.todoList, element.task_name, this.data.project_id, element.status, element.id);
                     todoItem.addTodoItem();
                 }
             }
@@ -64,8 +64,13 @@ class TodoList extends Global {
 
         this.addTodoItemBtn.addEventListener('click', () => {
             if (this.isValid(this.inputAddTodoItem)) {
-                const todoItem = new TodoItem(this.todoList, this.inputAddTodoItem.value);
+                const todoItem = new TodoItem(this.todoList, this.inputAddTodoItem.value, this.todoListWrap.dataset.projectId);
                 let taskInfo = todoItem.addTodoItem();
+                
+                
+                    this.insertTodoList(taskInfo);
+                
+
                 this.inputAddTodoItem.value = '';
 
                 if(taskInfo){
@@ -89,7 +94,21 @@ class TodoList extends Global {
         // });
 
         this.deleteTodoListBtn.addEventListener('click', () => {
-            this.deleteElement(this.todoListWrap);
+            // this.deleteElement(this.todoListWrap);
+            let projectInfo = this.deleteElement(this.todoListWrap);
+            let children = this.todoListWrap.querySelectorAll('.todo-item');
+
+            for (let i = 0; i < children.length; i++) {
+                const element = children[i];
+                let taskInfo = this.deleteElement(element);
+                this.deleteTodoList(taskInfo);
+            }
+
+                    this.deleteTodoList(projectInfo);
+
+                    
+                
+
         });
 
         this.editTodoListBtn.addEventListener('click', () => {
@@ -170,7 +189,7 @@ class TodoList extends Global {
     }
 
     updateTodoList(body) {
-        console.log(JSON.stringify(body));
+        
         const xhr = new XMLHttpRequest();
 
         xhr.open('POST', 'server/update_data.php', true);
@@ -208,9 +227,12 @@ class TodoList extends Global {
             if (xhr.status != 200) {
                 alert(xhr.status + ': ' + xhr.statusText);
             } else {
-                // console.log(JSON.parse(xhr.responseText));
+                if(this.todoListWrap.dataset.projectId == ''){
+                    this.todoListWrap.dataset.projectId = xhr.responseText;
+                }
                 
                 console.log(xhr.responseText);
+                
             }
 
         }
@@ -218,29 +240,47 @@ class TodoList extends Global {
     }
 
 
-    // deleteElementDB(body){
+    deleteTodoList(body) {
+        
+        const xhr = new XMLHttpRequest();
 
-    //     const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'server/delete_data.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify(body));
 
-    //     xhr.open('POST', 'server/index.php', true);
+        xhr.onreadystatechange = () => {
 
-    //     xhr.send(JSON.stringify(body));
+            if (xhr.readyState != 4) return;
 
-    //     xhr.onreadystatechange = () => {
+            if (xhr.status != 200) {
+                alert(xhr.status + ': ' + xhr.statusText);
+            } else {
+                                
+                console.log(xhr.responseText);
+                
+            }
 
-    //         if (xhr.readyState != 4) return;
-
-    //         if (xhr.status != 200) {
-    //             alert(xhr.status + ': ' + xhr.statusText);
-    //         } else {
-    //             console.log(JSON.parse(xhr.responseText));
-    //         }
-
-    //     }
-    // }
+        }
+        
+    }
 
     deleteElement(el) {
         el.parentNode.removeChild(el);
+        if (el.dataset.elementName == 'project') {
+            
+            return { element_name: el.dataset.elementName, 
+                     project_name: el.dataset.projectName, 
+                     project_id:   el.dataset.projectId }
+        }
+
+        if (el.dataset.elementName == 'task') {
+            
+            return { element_name:     el.dataset.elementName, 
+                     task_name:        el.dataset.taskName, 
+                     task_id:          el.dataset.taskId,
+                     task_status:      el.dataset.status,
+                     task_project_id:  el.dataset.taskProjectId }
+        }
     }
 
     editElement(el) {
@@ -272,7 +312,8 @@ class TodoList extends Global {
                 return { element_name: this.todoItem.dataset.elementName, 
                          task_name:    this.todoItem.dataset.taskName, 
                          task_id:      this.todoItem.dataset.taskId,
-                         task_status:  this.todoItem.dataset.status }
+                         task_status:  this.todoItem.dataset.status,
+                         task_project_id:  this.todoItem.dataset.taskProjectId }
             }
 
             editableLabel.innerHTML = editInput.value;
@@ -319,7 +360,7 @@ class TodoList extends Global {
 
 class TodoItem extends TodoList {
 
-    constructor(todoList, name_from_db, status, task_id, name) {
+    constructor(todoList, name_from_db, project_id, status, task_id, name) {
 
         super();
 
@@ -328,6 +369,7 @@ class TodoItem extends TodoList {
         this.name = name;
         this.status = status;
         this.task_id = task_id;
+        this.project_id = project_id || '';
 
         this.todoItemName = (this.name_from_db) ? this.name_from_db : this.name;
         this.isComlete = (this.status == 0) ? false : true;
@@ -342,6 +384,8 @@ class TodoItem extends TodoList {
         this.todoItem.dataset.taskName = this.todoItemName;
         this.todoItem.dataset.taskId = '';
         this.todoItem.dataset.status = '0';
+        this.todoItem.dataset.taskProjectId = this.project_id;
+
 
     }
 
@@ -352,18 +396,24 @@ class TodoItem extends TodoList {
 
         this.deleteItemBtn.addEventListener('click', () => {
             console.log(this.todoItem.dataset.taskId);
-            this.deleteElement(this.todoItem);
+            
+            let taskInfo = this.deleteElement(this.todoItem);
+            
+            if(taskInfo){
+                this.deleteTodoList(taskInfo);
+            }
+
         });
 
         this.editItemBtn.addEventListener('click', () => {
             if (this.isValid(this.editItemTitle)) {
-                // this.editElement(this.todoItem);
+                
                 let taskInfo = this.editElement(this.todoItem);
                 
                 if(taskInfo){
                     
                     if(taskInfo.task_id == ''){
-                        console.log('new');
+                        this.insertTodoList(taskInfo);
                     } else {
                         this.updateTodoList(taskInfo);
                     }
@@ -405,7 +455,8 @@ class TodoItem extends TodoList {
         return { element_name: this.todoItem.dataset.elementName, 
                  task_name:    this.todoItem.dataset.taskName, 
                  task_id:      this.todoItem.dataset.taskId,
-                 task_status:  this.todoItem.dataset.status }
+                 task_status:  this.todoItem.dataset.status,
+                 task_project_id:  this.todoItem.dataset.taskProjectId }
 
         
 
@@ -423,10 +474,11 @@ class TodoItem extends TodoList {
             this.todoItem.dataset.status = 0;
         }
 
-        return { element_name: this.todoItem.dataset.elementName, 
-                 task_name:    this.todoItem.dataset.taskName, 
-                 task_id:      this.todoItem.dataset.taskId,
-                 task_status:  this.todoItem.dataset.status }
+        return { element_name:     this.todoItem.dataset.elementName, 
+                 task_name:        this.todoItem.dataset.taskName, 
+                 task_id:          this.todoItem.dataset.taskId,
+                 task_status:      this.todoItem.dataset.status, 
+                 task_project_id:  this.todoItem.dataset.taskProjectId }
 
     }
 

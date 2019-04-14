@@ -40,7 +40,12 @@ function update_data($query, $mysqli){
     $result = $mysqli->query($query) or die("Ошибка " . $mysqli->error);
 
     if($result){
-        echo $result;
+        if($mysqli->insert_id){
+            echo $mysqli->insert_id;
+        } else {
+            echo $result;
+        }
+        
     
 
     // $result->close();
