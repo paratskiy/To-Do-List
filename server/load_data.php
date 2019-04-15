@@ -4,7 +4,8 @@ session_start();
 require_once 'function.php';
 require_once 'connection.php'; // подключаем скрипт
 
-$userId = $_SESSION['user_id'];
+// $userId = $_SESSION['user_id'];
+$userId = 1;
 
 // подключаемся к серверу
 $mysqli = new mysqli($host, $user, $password, $database);
@@ -16,7 +17,7 @@ if ($xml == 'load-todo-list') {
               FROM `projects` 
               WHERE `user_id` = (SELECT `user_id` 
                                  FROM `users` 
-                                 WHERE `user_id = '{$userId}')";
+                                 WHERE `user_id` = '{$userId}')";
 
     load_data($query, $mysqli);
 }

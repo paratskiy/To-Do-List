@@ -24,18 +24,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-registrationForm.addEventListener('submit', function (event) {
-    registration();
-    event.preventDefault();
-    return false;
-});
+// registrationForm.addEventListener('submit', function (event) {
+//     registration();
+//     event.preventDefault();
+//     return false;
+// });
 
-autchoForm.addEventListener('submit', function (event) {
-    autho();
-    event.preventDefault();
-    console.log(event);
-    return false;
-});
+// autchoForm.addEventListener('submit', function (event) {
+//     autho();
+//     event.preventDefault();
+//     console.log(event);
+//     return false;
+// });
 
 
 

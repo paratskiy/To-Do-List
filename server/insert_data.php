@@ -6,7 +6,8 @@ require_once 'connection.php'; // подключаем скрипт
 // подключаемся к серверу
 $mysqli = new mysqli($host, $user, $password, $database);
 
-$userId = $_SESSION['user_id'];
+// $userId = $_SESSION['user_id'];
+$userId = 1;
 
 $xml = file_get_contents('php://input');
 
