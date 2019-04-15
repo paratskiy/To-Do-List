@@ -1,6 +1,13 @@
 body{
     font-family: 'Roboto', sans-serif;
-    background-color: #6d6d44;
+    background: rgb(246,230,180); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(246,230,180,1) 6%, rgba(237,144,23,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(246,230,180,1) 6%,rgba(237,144,23,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(246,230,180,1) 6%,rgba(237,144,23,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+i{
+    margin-right: 10px;
 }
 
 .wrap{
@@ -29,6 +36,7 @@ span.title > span{
 }
 
 .todo-list-wrap{
+    margin-bottom: 50px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,6 +44,7 @@ span.title > span{
 }
 
 .todo-list-wrap i {
+    cursor: pointer;
     height: 30px;
     line-height: 30px;
     vertical-align: middle;
@@ -44,6 +53,23 @@ span.title > span{
 input{
     box-sizing: border-box;
     height: 30px;
+}
+
+input.edit.edit-todo-title {
+    height: auto;
+    padding: 0;
+    background: none;
+    border: none;
+    outline: none;
+    width: 85%;
+    margin-left: 10px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    vertical-align: middle;
+    outline-offset: unset;
 }
 
 [type="checkbox"]{
@@ -55,7 +81,7 @@ input.edit.hide{
 }
 
 label.title.hide{
-    display: none;
+    display: none !important;
 }
 
 form{
@@ -66,20 +92,32 @@ form{
 form.todo-list-header{
     width: 700px;
     height: 50px;
-    background-color: blue;
+    background: rgb(109,179,242); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(109,179,242,1) 0%, rgba(54,144,240,1) 40%, rgba(54,144,240,1) 40%, rgba(30,105,222,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 label.todo-title{
-    width: 78%;
-    margin-left: 10px;
-    color: #fff;
+    vertical-align: -webkit-baseline-middle;
+    display: inline-block;
+    padding: 0;
     background: none;
     border: none;
+    outline-offset: 0px !important;
+    outline: none;
+    width: 85%;
+    margin-left: 10px;
+    color: #fff;
     font-weight: 600;
     font-size: 20px;
+    box-sizing: border-box;
+    height: 100%;
+    line-height: unset;
 }
 
 form.todo-list-header i {
+    cursor: pointer;
     font-size: 18px;
     color: #ffffffcf;
 }
@@ -87,36 +125,47 @@ form.todo-list-header i {
 form.todo-list-header i.calendar {
     color: #484848;
     font-size: 25px;
+    cursor: unset;
 }
 
 form.create-todo-item{
     width: 700px;
     height: 50px;
-    background-color: darkgray;
     position: relative;
+    background: rgb(238,238,238); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(238,238,238,1) 0%, rgba(204,204,204,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(238,238,238,1) 0%,rgba(204,204,204,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 input.add-todo-item {
     width: 78%;
-    margin-left: 10px;
     border: none;
     padding-left: 10px;
 }
 
+i.fas.fa-plus{
+    cursor: unset;
+}
+
 form.create-todo-item i {
     font-size: 25px;
-    color: #006100;
+    color: rgb(140, 162, 84);
     height: 30px;
     vertical-align: middle;
 }
 
 form.create-todo-item button {
+    cursor: pointer;
     height: 30px;
     position: absolute;
     top: 10px;
     width: 15%;
     height: 30px;
-    background-color: green;
+    background: rgb(201,222,150); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(201,222,150,1) 0%, rgba(138,182,107,1) 44%, rgba(57,130,53,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(201,222,150,1) 0%,rgba(138,182,107,1) 44%,rgba(57,130,53,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(201,222,150,1) 0%,rgba(138,182,107,1) 44%,rgba(57,130,53,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     color: #fff;
     border: none;
     border-radius: 0 5px 5px 0;
@@ -131,7 +180,6 @@ li.todo-item{
     line-height: 30px;
     list-style-type: none;
     width: 700px;
-    height: 50px;
     padding: 10px;
     box-sizing: border-box;
     background-color: #fff;
@@ -141,7 +189,74 @@ li.todo-item:last-child{
     border-radius: 0 0 20px 20px;
 }
 
+li.todo-item:not(:last-child){
+    border-bottom: 1px solid #d8d8d8;
+}
+
 li.todo-item.complete label{
     text-decoration: line-through;
 }
 
+label.title.item-title {
+    color: #9e9e9e;
+    display: inline-block;
+    width: 85%;
+}
+
+.li.todo-item:before {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    content: "";
+}
+
+input.done, label.title.item-title, i {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+input.done{
+    width: 5%;
+}
+
+.todo-item i {
+    color: #9e9e9e;
+}
+
+input.edit.edit-item-title {
+    width: 85%;
+    background: none;
+    border: none;
+    outline: none;
+    outline-offset: unset;
+    display: inline-block;
+    vertical-align: middle;
+    color: #9e9e9e;
+}
+
+input.edit.edit-item-title.hide {
+    display: none !important;
+}
+
+#add-todo-list i.fas.fa-plus {
+    margin-right: 10px;
+    /* font-size: 25px; */
+    color: #12479a;
+}
+
+#add-todo-list{
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 0 auto;
+    width: 50%;
+    max-width: 200px;
+    height: 40px;
+    color: #fff;
+    border: none;
+    display: block;
+    background: rgb(109,179,242); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(109,179,242,1) 0%, rgba(54,144,240,1) 40%, rgba(54,144,240,1) 40%, rgba(30,105,222,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}

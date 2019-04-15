@@ -31,6 +31,7 @@ class TodoList extends Global {
             class: 'add-todo-item',
             placeholder: 'Start typing here to create a task...'
         });
+
         this.addTodoItemBtn = this.createElement('button', { class: 'add-todo-item-btn', type: 'button' }, 'Add Task');
         this.createTodoItem = this.createElement('form', {
             class: 'create-todo-item',
@@ -38,8 +39,8 @@ class TodoList extends Global {
         }, this.logoAddTodoItem, this.inputAddTodoItem, this.addTodoItemBtn);
 
         this.todoList = this.createElement('ul', { class: 'todo-list' });
-
         this.todoListWrap = this.createElement('div', { class: 'todo-list-wrap' }, this.todoListHeader, this.createTodoItem, this.todoList);
+
         this.todoListWrap.dataset.projectName = '';
         this.todoListWrap.dataset.projectId = '';
         this.todoListWrap.dataset.elementName = 'project';
@@ -51,91 +52,85 @@ class TodoList extends Global {
         this.parent.appendChild(this.todoListWrap);
 
         if (this.data) {
+
             this.todoListWrap.dataset.projectId = this.data.project_id;
             this.todoListWrap.dataset.projectName = this.name;
+
             for (const key in this.data) {
+
                 if (this.data.hasOwnProperty(key) && typeof this.data[key] != 'string') {
+
                     const element = this.data[key];
                     const todoItem = new TodoItem(this.todoList, element.task_name, this.data.project_id, element.status, element.id);
                     todoItem.addTodoItem();
+
                 }
+
             }
+
         }
 
         this.addTodoItemBtn.addEventListener('click', () => {
+
             if (this.isValid(this.inputAddTodoItem)) {
+
                 const todoItem = new TodoItem(this.todoList, this.inputAddTodoItem.value, this.todoListWrap.dataset.projectId);
                 let taskInfo = todoItem.addTodoItem();
-                
-                
-                    this.insertTodoList(taskInfo);
-                
+
+                this.insertTodoList(taskInfo);
 
                 this.inputAddTodoItem.value = '';
 
-                if(taskInfo){
+                if (taskInfo) {
                     console.log(taskInfo);
                 }
 
             } else {
                 console.log('invalid');
             }
+
         });
 
-        // this.inputAddTodoItem.addEventListener('keydown', (event) => {
-        //     if (event.keyCode == 13) {
-        //         if (this.isValid(this.inputAddTodoItem)) {
-        //                  const todoItem = new TodoItem(element.task_name, element.status, element.id);
-        //todoItem.addTodoItem();
-        //         } else {
-        //             console.log('invalid');
-        //         }
-        //     }
-        // });
-
         this.deleteTodoListBtn.addEventListener('click', () => {
-            // this.deleteElement(this.todoListWrap);
+
             let projectInfo = this.deleteElement(this.todoListWrap);
             let children = this.todoListWrap.querySelectorAll('.todo-item');
 
             for (let i = 0; i < children.length; i++) {
+
                 const element = children[i];
                 let taskInfo = this.deleteElement(element);
                 this.deleteTodoList(taskInfo);
+
             }
 
-                    this.deleteTodoList(projectInfo);
-
-                    
-                
+            this.deleteTodoList(projectInfo);
 
         });
 
         this.editTodoListBtn.addEventListener('click', () => {
+
             if (this.isValid(this.editTodoTitle)) {
+
                 let projectInfo = this.editElement(this.todoListWrap);
 
-                if(projectInfo.project_id == ''){
+                if (projectInfo.project_id == '') {
                     this.insertTodoList(projectInfo);
                 } else {
                     this.updateTodoList(projectInfo);
                 }
 
             } else {
+
                 console.log('invalid');
+
             }
+
         });
 
         if (!name) {
             this.nameTheList(this.todoListWrap);
         }
-        // console.log(this);
-
-        if (this.todoListWrap.dataset.projectName) {
-            // console.log(this.todoListWrap.dataset.projectName);
-        }
-
-
 
     }
 
@@ -149,7 +144,6 @@ class TodoList extends Global {
 
         if (this.isValid(editInput)) {
             let projectName = this.editElement(el);
-            // console.log(projectName);
         } else {
             console.log('invalid');
         }
@@ -189,11 +183,13 @@ class TodoList extends Global {
     }
 
     updateTodoList(body) {
-        
+
         const xhr = new XMLHttpRequest();
 
         xhr.open('POST', 'server/update_data.php', true);
+
         xhr.setRequestHeader('Content-Type', 'application/json');
+
         xhr.send(JSON.stringify(body));
 
         xhr.onreadystatechange = () => {
@@ -203,8 +199,6 @@ class TodoList extends Global {
             if (xhr.status != 200) {
                 alert(xhr.status + ': ' + xhr.statusText);
             } else {
-                // console.log(JSON.parse(xhr.responseText));
-                
                 console.log(xhr.responseText);
             }
 
@@ -213,11 +207,13 @@ class TodoList extends Global {
     }
 
     insertTodoList(body) {
-        
+
         const xhr = new XMLHttpRequest();
 
         xhr.open('POST', 'server/insert_data.php', true);
+
         xhr.setRequestHeader('Content-Type', 'application/json');
+
         xhr.send(JSON.stringify(body));
 
         xhr.onreadystatechange = () => {
@@ -227,25 +223,27 @@ class TodoList extends Global {
             if (xhr.status != 200) {
                 alert(xhr.status + ': ' + xhr.statusText);
             } else {
-                if(this.todoListWrap.dataset.projectId == ''){
+                if (this.todoListWrap.dataset.projectId == '') {
                     this.todoListWrap.dataset.projectId = xhr.responseText;
                 }
-                
+
                 console.log(xhr.responseText);
-                
+
             }
 
         }
-        
+
     }
 
 
     deleteTodoList(body) {
-        
+
         const xhr = new XMLHttpRequest();
 
         xhr.open('POST', 'server/delete_data.php', true);
+
         xhr.setRequestHeader('Content-Type', 'application/json');
+
         xhr.send(JSON.stringify(body));
 
         xhr.onreadystatechange = () => {
@@ -255,31 +253,35 @@ class TodoList extends Global {
             if (xhr.status != 200) {
                 alert(xhr.status + ': ' + xhr.statusText);
             } else {
-                                
+
                 console.log(xhr.responseText);
-                
+
             }
 
         }
-        
+
     }
 
     deleteElement(el) {
         el.parentNode.removeChild(el);
         if (el.dataset.elementName == 'project') {
-            
-            return { element_name: el.dataset.elementName, 
-                     project_name: el.dataset.projectName, 
-                     project_id:   el.dataset.projectId }
+
+            return {
+                element_name: el.dataset.elementName,
+                project_name: el.dataset.projectName,
+                project_id: el.dataset.projectId
+            }
         }
 
         if (el.dataset.elementName == 'task') {
-            
-            return { element_name:     el.dataset.elementName, 
-                     task_name:        el.dataset.taskName, 
-                     task_id:          el.dataset.taskId,
-                     task_status:      el.dataset.status,
-                     task_project_id:  el.dataset.taskProjectId }
+
+            return {
+                element_name: el.dataset.elementName,
+                task_name: el.dataset.taskName,
+                task_id: el.dataset.taskId,
+                task_status: el.dataset.status,
+                task_project_id: el.dataset.taskProjectId
+            }
         }
     }
 
@@ -297,23 +299,27 @@ class TodoList extends Global {
         if (editInput.value != editableLabel.innerHTML) {
 
             if (el.dataset.elementName == 'project') {
-                
+
                 this.todoListWrap.dataset.projectName = editInput.value;
                 editableLabel.innerHTML = editInput.value;
-                return { element_name: this.todoListWrap.dataset.elementName, 
-                         project_name: this.todoListWrap.dataset.projectName, 
-                         project_id:   this.todoListWrap.dataset.projectId }
+                return {
+                    element_name: this.todoListWrap.dataset.elementName,
+                    project_name: this.todoListWrap.dataset.projectName,
+                    project_id: this.todoListWrap.dataset.projectId
+                }
             }
 
             if (el.dataset.elementName == 'task') {
-                
+
                 this.todoItem.dataset.taskName = editInput.value;
                 editableLabel.innerHTML = editInput.value;
-                return { element_name: this.todoItem.dataset.elementName, 
-                         task_name:    this.todoItem.dataset.taskName, 
-                         task_id:      this.todoItem.dataset.taskId,
-                         task_status:  this.todoItem.dataset.status,
-                         task_project_id:  this.todoItem.dataset.taskProjectId }
+                return {
+                    element_name: this.todoItem.dataset.elementName,
+                    task_name: this.todoItem.dataset.taskName,
+                    task_id: this.todoItem.dataset.taskId,
+                    task_status: this.todoItem.dataset.status,
+                    task_project_id: this.todoItem.dataset.taskProjectId
+                }
             }
 
             editableLabel.innerHTML = editInput.value;
@@ -321,27 +327,6 @@ class TodoList extends Global {
         }
 
         return false;
-
-        // const keydownEvent = (event) => {
-
-        //     if (event.keyCode === 13) {
-        //         if (this.isValid(editInput)) {
-        //             editInput.classList.toggle('hide');
-        //             editableLabel.classList.toggle('hide');
-
-        //             editableLabel.innerHTML = editInput.value;
-
-        //             editInput.removeEventListener('keydown', keydownEvent, false);
-        //             console.log(editableLabel);
-        //         } else {
-        //             console.log('invalid');
-        //         }
-
-        //     }
-
-        // }
-        // editInput.removeEventListener('keydown', keydownEvent, false);
-        // editInput.addEventListener('keydown', keydownEvent, false);
 
     }
 
@@ -377,10 +362,10 @@ class TodoItem extends TodoList {
         this.completeCheckbox = this.createElement('input', { type: 'checkbox', name: 'done', class: 'done' });
         this.itemTitle = this.createElement('label', { class: 'title item-title' }, this.todoItemName);
         this.editItemTitle = this.createElement('input', { type: 'text', name: 'edit-item-title', class: 'edit edit-item-title hide', value: this.todoItemName });
-        this.moveItemBtn = this.createElement('i', { class: 'fas fa-arrows-alt-v move' });
         this.editItemBtn = this.createElement('i', { class: 'fas fa-pen edit' });
         this.deleteItemBtn = this.createElement('i', { class: 'far fa-trash-alt delete' });
-        this.todoItem = this.createElement('li', { class: 'todo-item' }, this.completeCheckbox, this.itemTitle, this.editItemTitle, this.moveItemBtn, this.editItemBtn, this.deleteItemBtn);
+        this.todoItem = this.createElement('li', { class: 'todo-item' }, this.completeCheckbox, this.itemTitle, this.editItemTitle, this.editItemBtn, this.deleteItemBtn);
+
         this.todoItem.dataset.taskName = this.todoItemName;
         this.todoItem.dataset.taskId = '';
         this.todoItem.dataset.status = '0';
@@ -396,10 +381,10 @@ class TodoItem extends TodoList {
 
         this.deleteItemBtn.addEventListener('click', () => {
             console.log(this.todoItem.dataset.taskId);
-            
+
             let taskInfo = this.deleteElement(this.todoItem);
-            
-            if(taskInfo){
+
+            if (taskInfo) {
                 this.deleteTodoList(taskInfo);
             }
 
@@ -407,12 +392,12 @@ class TodoItem extends TodoList {
 
         this.editItemBtn.addEventListener('click', () => {
             if (this.isValid(this.editItemTitle)) {
-                
+
                 let taskInfo = this.editElement(this.todoItem);
-                
-                if(taskInfo){
-                    
-                    if(taskInfo.task_id == ''){
+
+                if (taskInfo) {
+
+                    if (taskInfo.task_id == '') {
                         this.insertTodoList(taskInfo);
                     } else {
                         this.updateTodoList(taskInfo);
@@ -427,8 +412,8 @@ class TodoItem extends TodoList {
 
         this.completeCheckbox.addEventListener('change', () => {
             let taskInfo = this.completeTask();
-            
-            if(taskInfo){
+
+            if (taskInfo) {
                 this.updateTodoList(taskInfo);
             }
         })
@@ -446,19 +431,17 @@ class TodoItem extends TodoList {
             this.todoItem.dataset.taskName = this.name_from_db;
         }
 
-        if (this.todoItem.dataset.taskName) {
-            // console.log(this.todoItem.dataset.taskName);
-        }
-
         this.todoItem.dataset.elementName = 'task';
 
-        return { element_name: this.todoItem.dataset.elementName, 
-                 task_name:    this.todoItem.dataset.taskName, 
-                 task_id:      this.todoItem.dataset.taskId,
-                 task_status:  this.todoItem.dataset.status,
-                 task_project_id:  this.todoItem.dataset.taskProjectId }
+        return {
+            element_name: this.todoItem.dataset.elementName,
+            task_name: this.todoItem.dataset.taskName,
+            task_id: this.todoItem.dataset.taskId,
+            task_status: this.todoItem.dataset.status,
+            task_project_id: this.todoItem.dataset.taskProjectId
+        }
 
-        
+
 
     }
 
@@ -468,17 +451,19 @@ class TodoItem extends TodoList {
 
         this.todoItem.classList.toggle('complete');
 
-        if(this.todoItem.dataset.status == 0){
+        if (this.todoItem.dataset.status == 0) {
             this.todoItem.dataset.status = 1;
         } else {
             this.todoItem.dataset.status = 0;
         }
 
-        return { element_name:     this.todoItem.dataset.elementName, 
-                 task_name:        this.todoItem.dataset.taskName, 
-                 task_id:          this.todoItem.dataset.taskId,
-                 task_status:      this.todoItem.dataset.status, 
-                 task_project_id:  this.todoItem.dataset.taskProjectId }
+        return {
+            element_name: this.todoItem.dataset.elementName,
+            task_name: this.todoItem.dataset.taskName,
+            task_id: this.todoItem.dataset.taskId,
+            task_status: this.todoItem.dataset.status,
+            task_project_id: this.todoItem.dataset.taskProjectId
+        }
 
     }
 
