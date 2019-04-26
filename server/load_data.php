@@ -4,8 +4,9 @@ session_start();
 require_once 'function.php';
 require_once 'connection.php'; // подключаем скрипт
 
-// $userId = $_SESSION['user_id'];
-$userId = 1;
+
+$userId = $_SESSION['user_id'];
+// $userId = 1;
 
 // подключаемся к серверу
 $mysqli = new mysqli($host, $user, $password, $database);

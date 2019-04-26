@@ -2,13 +2,17 @@
 
 class TodoList extends Global {
 
-    constructor(parent, name, data) {
+    constructor(parent, isFirstIni, name, data) {
 
         super();
+
+        this.isFirstIni = isFirstIni || false;
 
         this.parent = parent;
         this.data = data;
         this.name = name;
+
+        this.addTodoListBtn = document.querySelector('#add-todo-list');
 
         this.todoListName = (this.name) ? this.name : '';
 
@@ -48,8 +52,9 @@ class TodoList extends Global {
     }
 
     createTodoList() {
+        console.log(this);
 
-        this.parent.appendChild(this.todoListWrap);
+        this.parent.insertBefore(this.todoListWrap, this.addTodoListBtn);
 
         if (this.data) {
 
@@ -171,7 +176,7 @@ class TodoList extends Global {
                 for (const key in response) {
                     if (response.hasOwnProperty(key)) {
                         const element = response[key];
-                        const todoList = new TodoList(parentNode, key, element);
+                        const todoList = new TodoList(parentNode, false, key, element);
                         todoList.createTodoList();
                     }
                 }
@@ -325,6 +330,28 @@ class TodoList extends Global {
             editableLabel.innerHTML = editInput.value;
 
         }
+
+        // const keydownEvent = (event) => {
+
+        //     if (event.keyCode === 13) {
+        //         if (this.isValid(editInput)) {
+        //             editInput.classList.toggle('hide');
+        //             editableLabel.classList.toggle('hide');
+
+        //             editableLabel.innerHTML = editInput.value;
+
+        //             editInput.removeEventListener('keydown', keydownEvent, false);
+        //             console.log(editableLabel);
+        //         } else {
+        //             console.log('invalid');
+        //         }
+
+        //     }
+
+        // }
+
+        // editInput.removeEventListener('keydown', keydownEvent, false);
+        // editInput.addEventListener('keydown', keydownEvent, false);
 
         return false;
 

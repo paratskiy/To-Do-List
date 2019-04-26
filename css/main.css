@@ -1,18 +1,22 @@
+html, body{
+    min-height: 100% !important;
+}
+
 body{
     font-family: 'Roboto', sans-serif;
     background: rgb(246,230,180); /* Old browsers */
-    background: -moz-linear-gradient(top, rgba(246,230,180,1) 6%, rgba(237,144,23,1) 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, rgba(246,230,180,1) 6%,rgba(237,144,23,1) 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, rgba(246,230,180,1) 6%,rgba(237,144,23,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background: -moz-linear-gradient(top, rgba(246,230,180,1) 6%, rgba(237,144,23,1) 100%) no-repeat; /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(246,230,180,1) 6%,rgba(237,144,23,1) 100%) no-repeat; /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(246,230,180,1) 6%,rgba(237,144,23,1) 100%) no-repeat; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 i{
     margin-right: 10px;
 }
 
-.wrap{
-    height: 100vh;
-}
+/* .wrap{
+    min-height: 100% !important;
+} */
 
 header{
     text-align: center;
@@ -248,7 +252,7 @@ input.edit.edit-item-title.hide {
     cursor: pointer;
     font-weight: 600;
     font-size: 18px;
-    margin: 0 auto;
+    margin: 50px auto;
     width: 50%;
     max-width: 200px;
     height: 40px;
@@ -260,3 +264,47 @@ input.edit.edit-item-title.hide {
     background: -webkit-linear-gradient(top, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
+
+
+input[name="login"], input[name="password"], input[name="confirm-password"] {
+    display: block;
+    border: 1px solid #ccc;
+    margin: 5px auto;
+    border-radius: 0%;
+    width: 250px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.btn-wrap {
+    text-align: center;
+}
+
+.btn-wrap button, button.sign-out{
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 10px auto;
+    padding: 0px 15px;
+    height: 30px;
+    color: #fff;
+    border: none;
+    display: block;
+    background: rgb(109,179,242); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(109,179,242,1) 0%, rgba(54,144,240,1) 40%, rgba(54,144,240,1) 40%, rgba(30,105,222,1) 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(109,179,242,1) 0%,rgba(54,144,240,1) 40%,rgba(54,144,240,1) 40%,rgba(30,105,222,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+span.autho-user {
+    display: block;
+    text-align: center;
+    color: #515151;
+}
+
+span.autho-user span{
+    color: blue;
+}
+

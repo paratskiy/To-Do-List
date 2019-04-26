@@ -13,17 +13,15 @@ $xml = file_get_contents('php://input');
 
 $data = json_decode($xml, true);
 
-if($xml){
+if ($xml) {
 
-    if($data['element_name'] == 'project'){
+    if ($data['element_name'] == 'project') {
         $query = "DELETE FROM `projects` WHERE `projects`.`id` = {$data['project_id']}";
         update_data($query, $mysqli);
     }
-    
-    if($data['element_name'] == 'task'){
+
+    if ($data['element_name'] == 'task') {
         $query = "DELETE FROM `tasks` WHERE `tasks`.`id` = {$data['task_id']}";
         update_data($query, $mysqli);
     }
-    
-
 }

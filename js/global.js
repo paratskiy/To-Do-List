@@ -2,7 +2,7 @@
 
 class Global {
 
-    constructor(){
+    constructor() {
 
     }
 
